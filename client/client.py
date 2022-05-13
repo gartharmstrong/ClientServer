@@ -1,6 +1,18 @@
 import socket
 from cryptography.fernet import Fernet
+import json
+import pickle as pk
 
+# Dictionary 
+data = {
+    'Group': 'B',
+    'Program':'Client Server', 
+    'Task':'Send dictionary'
+}
+
+json_pick = json.dumps(data) # for pickling JSON format 
+binary_pick = pk.dumps(data) # for picking binary format
+xml_pick = 1
 
 def generate_key():
     key = Fernet.generate_key()
@@ -32,6 +44,16 @@ def main():
     #File Pickling
     while True:
         msg_pickling = print(f"Choose pickling format")
+        msg_pickling = input("1, A\n"
+                 "2, B\n"
+                 "3, C\n"
+                 "Choose 1 for JSON, 2 for Binary format, 3 for XML :")
+        if (str(msg_pickling) == "1"):
+            sendmesg = json_pick # pick for JSON format
+        elif (str(msg_pickling) == "2"):
+            sendmesg = binary_pick # pick for binary format
+        elif (str(msg_pickling) == "3"):
+            sendmesg = xml_pick # pick for XML format
         break
 
     #File encryption
