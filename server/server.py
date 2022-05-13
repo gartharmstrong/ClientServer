@@ -1,7 +1,17 @@
 import socket                                        
 from cryptography.fernet import Fernet
 import os
+import json
+import pickle as pk
 
+def json_format(data): #function for json
+    data = json.loads()
+
+def binary_format(data): #function for binary
+    data = pk.loads()
+
+def xml_format(data): # function for XML(temporary)
+    data = 1
 
 def decrypt_file(filename):
     key = open("key.key", "rb").read()
@@ -84,6 +94,15 @@ def main():
         #Decrypt file if required
         if file_encrypted == "y":
             decrypt_file(file_name)
+        
+        if clientsocket.recv(1).decode('utf-8') == "1": # for JSON format pick
+            json_format(data)
+        
+        if clientsocket.recv(1).decode('utf-8') == "2": # for binary format pick
+            binary_format(data)
+        
+        if clientsocket.recv(1).decode('utf-8') == "3": # for XML format pick
+            xml_format(data)
 
         #Output to console
         if output_type.lower() == "c":
