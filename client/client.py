@@ -2,6 +2,7 @@ import socket
 from cryptography.fernet import Fernet
 import json
 import pickle as pk
+import time
 
 # Dictionary 
 data = {
@@ -41,32 +42,42 @@ def main():
         else:
             print("invalid selection")
 
-    #File Pickling
-    while True:
-        msg_pickling = print(f"Choose pickling format")
-        msg_pickling = input("1, A\n"
-                 "2, B\n"
-                 "3, C\n"
-                 "Choose 1 for JSON, 2 for Binary format, 3 for XML :")
-        if (str(msg_pickling) == "1"):
-            sendmesg = json_pick # pick for JSON format
-        elif (str(msg_pickling) == "2"):
-            sendmesg = binary_pick # pick for binary format
-        elif (str(msg_pickling) == "3"):
-            sendmesg = xml_pick # pick for XML format
-        break
+    #File Pickling - only for dictionary
+    if file_type == "d":
+        while True:
+            msg_pickling = print(f"Choose pickling format")
+            msg_pickling = input("1, A\n"
+                    "2, B\n"
+                    "3, C\n"
+                    "Choose 1 for JSON, 2 for Binary format, 3 for XML :")
+            if (str(msg_pickling) == "1"):
+                sendmesg = str.encode(json_pick) # pick for JSON format
+                break
+            elif (str(msg_pickling) == "2"):
+                sendmesg = binary_pick # pick for binary format
+                break
+            elif (str(msg_pickling) == "3"):
+                sendmesg = xml_pick # pick for XML format
+                break
+            else:
+                print("invalid selection")
+    else:
+        msg_pickling="0" #default value if text file
 
-    #File encryption
-    while True:
-        file_encrypted = input("Encrypt file (y/n)? ")
-        if file_encrypted.lower() == "y":
-            print("File will be encrypted")
-            break
-        elif file_encrypted.lower() == "n":
-            print("File will not be encrypted")
-            break
-        else:
-            print("invalid selection")
+    #File encryption - only for text file
+    if file_type == "t":
+        while True:
+            file_encrypted = input("Encrypt file (y/n)? ")
+            if file_encrypted.lower() == "y":
+                print("File will be encrypted")
+                break
+            elif file_encrypted.lower() == "n":
+                print("File will not be encrypted")
+                break
+            else:
+                print("invalid selection")
+    else:
+        file_encrypted="n" #default value if dictionary
 
     #File name
     while True:
@@ -93,13 +104,18 @@ def main():
     s.send(msg_pickling.encode('utf-8'))
     s.send(file_encrypted.encode('utf-8'))
     s.send(file_name.encode('utf-8'))
-     
-    file = open(file_name,'rb')
-    data = file.read(1024)
-    while (data):
-        s.send(data)
+
+    if file_type == "t":
+        file = open(file_name,'rb')
         data = file.read(1024)
-    file.close()
+        while (data):
+            s.send(data)
+            data = file.read(1024)
+        file.close()
+    elif file_type == "d":
+        time.sleep(2)
+        print("Pickled data: " + str(sendmesg))
+        s.send(sendmesg)
 
     s.close()
 
