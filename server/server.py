@@ -4,11 +4,17 @@ import os
 import json
 import pickle as pk
 
-def json_format(data): #function for json
-    data = json.loads()
+def json_format(file_name): #function for json
+    with open(file_name, 'r') as pkfile:
+        unpickled = json.loads(pkfile.read())
+    with open(file_name, 'w') as unpkfile:
+        unpkfile.write(str(unpickled))
 
-def binary_format(data): #function for binary
-    data = pk.loads()
+def binary_format(file_name): #function for binary
+    with open(file_name,'rb') as pkfile:
+        unpickled = pk.load(pkfile)
+    with open(file_name, 'w') as unpkfile:
+        unpkfile.write(str(unpickled))
 
 def xml_format(data): # function for XML(temporary)
     data = 1
@@ -65,9 +71,9 @@ def main():
 
         # Receive parameters from client
         file_type = clientsocket.recv(1).decode('utf-8')
+        file_pickling = clientsocket.recv(1).decode('utf-8')
         file_encrypted = clientsocket.recv(1).decode('utf-8')
         file_name = clientsocket.recv(100).decode('utf-8')
-        file_pickling = clientsocket.recv(1).decode('utf-8')
 
         print("\nFile type: " + file_type)
         print("Pickling: " + file_pickling)
@@ -94,14 +100,12 @@ def main():
         #Decrypt file if required
         if file_encrypted == "y":
             decrypt_file(file_name)
-        
-        if clientsocket.recv(1).decode('utf-8') == "1": # for JSON format pick
-            json_format(data)
-        
-        if clientsocket.recv(1).decode('utf-8') == "2": # for binary format pick
-            binary_format(data)
-        
-        if clientsocket.recv(1).decode('utf-8') == "3": # for XML format pick
+
+        if file_pickling == "1": # for JSON format pick
+            json_format(file_name)
+        elif file_pickling == "2": # for binary format pick
+            binary_format(file_name)
+        elif file_pickling == "3": # for XML format pick
             xml_format(data)
 
         #Output to console
