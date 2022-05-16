@@ -2,6 +2,7 @@ import socket
 from cryptography.fernet import Fernet
 import os
 import json
+import xml.etree.ElementTree as et
 import pickle as pk
 
 def json_format(file_name): #function for json
@@ -16,8 +17,11 @@ def binary_format(file_name): #function for binary
     with open(file_name, 'w') as unpkfile:
         unpkfile.write(str(unpickled))
 
-def xml_format(data): # function for XML(temporary)
-    data = 1
+def xml_format(file_name): # function for XML(temporary) (added to code)
+    with open(file_name,'r') as pkfile: # added to code
+        unpickled = et.parse(pkfile) # added to code
+    with open(file_name, 'w') as unpkfile: # added to code
+        unpkfile.write(str(unpickled)) # added to code
 
 def decrypt_file(filename):
     key = open("key.key", "rb").read()
@@ -50,8 +54,9 @@ def main():
                 socket.AF_INET, socket.SOCK_STREAM)
 
     # get local machine name
-    host = socket.gethostname()                           
-    port = 29999                                           
+    host = socket.gethostname()           
+                    
+    port = 29955
 
     # bind to the port
     try:
@@ -106,7 +111,7 @@ def main():
         elif file_pickling == "2": # for binary format pick
             binary_format(file_name)
         elif file_pickling == "3": # for XML format pick
-            xml_format(data)
+            xml_format(file_name) #added to code
 
         #Output to console
         if output_type.lower() == "c":
