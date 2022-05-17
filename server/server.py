@@ -10,11 +10,21 @@ def json_format(file_name): #function for json
     with open(file_name, 'w') as unpkfile:
         unpkfile.write(str(unpickled))
 
+def json_dict(file_name): #function for json <class 'dict'>
+    with open(file_name, 'r') as dictfile:
+        unpickled = json.loads(dictfile.read())
+    return unpickled
+
 def binary_format(file_name): #function for binary
     with open(file_name,'rb') as pkfile:
         unpickled = pk.load(pkfile)
     with open(file_name, 'w') as unpkfile:
         unpkfile.write(str(unpickled))
+        
+def binary_dict(file_name): #function for binary #function for binary <class 'dict'>
+    with open(file_name,'rb') as binfile:
+        unpickled = pk.load(binfile)
+    return unpickled
 
 def xml_format(data): # function for XML(temporary)
     data = 1
@@ -102,6 +112,7 @@ def main():
             decrypt_file(file_name)
 
         if file_pickling == "1": # for JSON format pick
+            # data_dict = json_dict(file_name) # for class dict 
             json_format(file_name)
         elif file_pickling == "2": # for binary format pick
             binary_format(file_name)
@@ -112,6 +123,7 @@ def main():
         if output_type.lower() == "c":
             print("Contents of file:")
             output_console(file_name)
+            # print(type(data_dict)) # console print for dictionary
             #Remove file - only want it in console
             if os.path.exists(file_name):
                 os.remove(file_name)
