@@ -30,12 +30,14 @@ def binary_dict(file_name): #function for binary
 def xml_format(data): # function for XML(temporary)
     data = 1
 
-def decrypt_file(filename):
+def decrypt_file(filename, output_type):
     key = open("key.key", "rb").read()
     f = Fernet(key)
     with open(filename, "rb") as file:
         encrypted_data = file.read()
     decrypted_data = f.decrypt(encrypted_data)
+    if output_type == "c":
+        print("\nDecrypted data: \n" + decrypted_data.decode("utf-8"))
     with open(filename, "wb") as file:
         file.write(decrypted_data)
 
@@ -133,10 +135,14 @@ def main():
                 print("Contents of data:  \n ",(data_binary)) # print data
                 if os.path.exists(file_name):
                     os.remove(file_name)
+            
+            elif file_type == "t":
+                print("Contents of text file:")
+                output_console(file_name)
 
         #Decrypt file if required
         if file_encrypted == "y":
-            decrypt_file(file_name)
+            decrypt_file(file_name, output_type)
 
         clientsocket.close()
         print("\nClosing server")
