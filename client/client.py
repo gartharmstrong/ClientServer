@@ -3,6 +3,7 @@ from cryptography.fernet import Fernet
 import json
 import pickle as pk
 import time
+import shutil
 
 # Dictionary 
 data = {
@@ -23,6 +24,9 @@ def generate_key():
 def encrypt_file(filename):
     key = open("key.key", "rb").read()
     f = Fernet(key)
+    dest = filename + time.strftime("%Y%m%d%H%M%S")
+    shutil.copy(filename, dest)
+    print("Source text file archived to " + dest)
     with open(filename, "rb") as file:
         file_data = file.read()
     encrypted_data = f.encrypt(file_data)
@@ -30,6 +34,12 @@ def encrypt_file(filename):
         file.write(encrypted_data)
 
 def main():
+    #Local or remote
+    while True:
+        host = input("Enter server hostname or IP: ")
+        if host != "":
+            break
+
     #File type
     while True:
         file_type = input("File type: Text file(t) or Dictionary(d)? ")
@@ -46,17 +56,20 @@ def main():
     if file_type == "d":
         while True:
             msg_pickling = print(f"Choose pickling format")
-            msg_pickling = input("1, A\n"
-                    "2, B\n"
-                    "3, C\n"
-                    "Choose 1 for JSON, 2 for Binary format, 3 for XML :")
+            msg_pickling = input("1, JSON\n"
+                    "2, Binary\n"
+                    "3, XML\n"
+                    "Choose 1 for JSON, 2 for Binary format, 3 for XML : ")
             if (str(msg_pickling) == "1"):
+                file_name = "jsonfile.txt"
                 sendmesg = str.encode(json_pick) # pick for JSON format
                 break
             elif (str(msg_pickling) == "2"):
+                file_name = "binaryfile.txt"
                 sendmesg = binary_pick # pick for binary format
                 break
             elif (str(msg_pickling) == "3"):
+                file_name = "xmlfile.txt"
                 sendmesg = xml_pick # pick for XML format
                 break
             else:
@@ -66,6 +79,7 @@ def main():
 
     #File encryption - only for text file
     if file_type == "t":
+        file_name = "textfile.txt"
         while True:
             file_encrypted = input("Encrypt file (y/n)? ")
             if file_encrypted.lower() == "y":
@@ -78,11 +92,6 @@ def main():
                 print("invalid selection")
     else:
         file_encrypted="n" #default value if dictionary
-
-    #File name
-    while True:
-        file_name = input("Enter filename to be sent: ")
-        break
     
     #Encrypt file if required
     if file_encrypted == "y":
@@ -91,19 +100,18 @@ def main():
     # create a socket object
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
 
-    # get local machine name
-    host = socket.gethostname()                           
-
     port = 29999
 
     # connection to hostname on the port.
     s.connect((host, port))                               
-    print("Connected")
+    print("Connected to server")
 
     s.send(file_type.encode('utf-8'))
     s.send(msg_pickling.encode('utf-8'))
     s.send(file_encrypted.encode('utf-8'))
     s.send(file_name.encode('utf-8'))
+
+    time.sleep(2)
 
     if file_type == "t":
         file = open(file_name,'rb')
@@ -113,7 +121,6 @@ def main():
             data = file.read(1024)
         file.close()
     elif file_type == "d":
-        time.sleep(2)
         print("Pickled data: " + str(sendmesg))
         s.send(sendmesg)
 
