@@ -1,9 +1,10 @@
-import socket                                        
+import socket                                     
 from cryptography.fernet import Fernet
 import os
 import json
-import xml.etree.ElementTree as et
 import pickle as pk
+import xml.etree.ElementTree as et
+import xmltodict
 
 def json_format(file_name): #function for json
     with open(file_name, 'r') as pkfile:
@@ -11,17 +12,41 @@ def json_format(file_name): #function for json
     with open(file_name, 'w') as unpkfile:
         unpkfile.write(str(unpickled))
 
+def json_dict(file_name): #function for json <class 'dict'>
+    with open(file_name, 'r') as dictfile:
+        unpickled = json.loads(dictfile.read())
+    return unpickled
+
 def binary_format(file_name): #function for binary
     with open(file_name,'rb') as pkfile:
         unpickled = pk.load(pkfile)
     with open(file_name, 'w') as unpkfile:
-        unpkfile.write(str(unpickled))
+        unpkfile.write(str())
+        
+def binary_dict(file_name): #function for binary <class 'dict'>
+    with open(file_name, 'rb') as pkfile:
+        unpickled = pk.load(pkfile, encoding='utf-8')
+        return unpickled
 
-def xml_format(file_name): # function for XML(temporary) (added to code)
+
+def xml_format(file_name): # function for XML
     with open(file_name,'r') as pkfile: # added to code
         unpickled = et.parse(pkfile) # added to code
-    with open(file_name, 'w') as unpkfile: # added to code
-        unpkfile.write(str(unpickled)) # added to code
+        root = unpickled.getroot()
+        write_file = et.tostring(root)
+        xml_decode = write_file.decode() 
+        xml_dict = xmltodict.parse(xml_decode) #change XML to dictionary
+    with open(file_name, 'w',) as unpkfile: # added to code
+        unpkfile.write(str(xml_dict)) # added to code
+
+def xml_format_dict(file_name): # function for XML <class 'dict'>
+    with open(file_name,'r') as pkfile: # added to code
+        unpickled = et.parse(pkfile) # added to code
+        root = unpickled.getroot()
+        write_file = et.tostring(root)
+        xml_decode = write_file.decode() # 
+        xml_dict = xmltodict.parse(xml_decode) #change XML to dictionary
+        return (xml_dict)
 
 def decrypt_file(filename):
     key = open("key.key", "rb").read()
@@ -38,6 +63,21 @@ def output_console(file_name):
     print(data)
 
 def main():
+    # create a socket object
+    serversocket = socket.socket(
+                socket.AF_INET, socket.SOCK_STREAM)
+
+    # get local machine name
+    host = socket.gethostname()
+    port = 29999
+    # bind to the port
+    try:
+        serversocket.bind((host, port))
+        print("Socket bind successful")
+    except:
+        print("Unable to bind socket")
+        exit(0)
+    
     while True:
         output_type = input("Output to File(f) or Console(c)? ")
         if output_type.lower() == "f":
@@ -49,25 +89,10 @@ def main():
         else:
             print("invalid selection\n")
 
-    # create a socket object
-    serversocket = socket.socket(
-                socket.AF_INET, socket.SOCK_STREAM)
-
-    # get local machine name
-    host = socket.gethostname()           
-                    
-    port = 29955
-
-    # bind to the port
-    try:
-        serversocket.bind((host, port))
-        print("Socket bind successful")
-    except:
-        print("Unable to bind socket")
-        exit(0)
 
     # queue up to 5 requests
     serversocket.listen(5)
+    print(f"Waiting for client to receive data ..")
 
     while True:
         # establish a connection
@@ -100,26 +125,42 @@ def main():
         print("\nReceived data\n")
 
         if output_type.lower() == "f":
+            # User choose to print in file
+            if file_pickling == "1": # for json format pick to file
+                json_format(file_name)
+            elif file_pickling == "2":  # for binary format pick to file
+                binary_format(file_name)
+            elif file_pickling == "3":  # for XML format pick to file
+                xml_format(file_name)
             print("File written to server")
+        
+        elif output_type.lower() == 'c':
+            # User choose to print on console
+            if file_pickling == "1": # for json format pick class dictionary
+                data_json = json_dict(file_name)
+                with open(file_name, 'r') as f:
+                    c = f.read()
+                print(type(data_json))
+                print("Contents of data: \n{}".format(c))
+                if os.path.exists(file_name):
+                    os.remove(file_name)
 
+            elif file_pickling == "2":  # for binary format pick class dictionary
+                data_binary = binary_dict(file_name)
+                print(type(data_binary)) # type class
+                print("Contents of data:  \n ",data_binary) # print data
+                if os.path.exists(file_name):
+                    os.remove(file_name)
+
+            elif file_pickling == "3":  # for xml format pick class dictionary
+                xml_file = xml_format_dict(file_name)
+                print(type(xml_file)) # type class
+                print("Contents of data:  \n ",xml_file) # print data
+                if os.path.exists(file_name):
+                    os.remove(file_name)
         #Decrypt file if required
         if file_encrypted == "y":
             decrypt_file(file_name)
-
-        if file_pickling == "1": # for JSON format pick
-            json_format(file_name)
-        elif file_pickling == "2": # for binary format pick
-            binary_format(file_name)
-        elif file_pickling == "3": # for XML format pick
-            xml_format(file_name) #added to code
-
-        #Output to console
-        if output_type.lower() == "c":
-            print("Contents of file:")
-            output_console(file_name)
-            #Remove file - only want it in console
-            if os.path.exists(file_name):
-                os.remove(file_name)
 
         clientsocket.close()
         print("\nClosing server")
