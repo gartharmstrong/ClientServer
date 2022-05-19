@@ -21,7 +21,7 @@ def binary_format(file_name): #function for binary
     with open(file_name,'rb') as pkfile:
         unpickled = pk.load(pkfile)
     with open(file_name, 'w') as unpkfile:
-        unpkfile.write(str())
+        unpkfile.write(str(unpickled))
         
 def binary_dict(file_name): #function for binary <class 'dict'>
     with open(file_name, 'rb') as pkfile:
