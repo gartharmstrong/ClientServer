@@ -166,10 +166,13 @@ def main():
             elif file_type == "t":
                 print("Contents of text file:")
                 output_console(file_name)
+                
 
         #Decrypt file if required
         if file_encrypted == "y":
             decrypt_file(file_name, output_type)
+            if output_type == "c":
+                os.remove(file_name)
 
         clientsocket.close()
         print("\nClosing server")
