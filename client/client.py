@@ -31,9 +31,8 @@ def generate_key():
 def encrypt_file(filename):
     key = open("key.key", "rb").read()
     f = Fernet(key)
-    dest = filename + time.strftime("%Y%m%d%H%M%S")
+    dest = filename + "backup"
     shutil.copy(filename, dest)
-    print("Source text file archived to " + dest)
     with open(filename, "rb") as file:
         file_data = file.read()
     encrypted_data = f.encrypt(file_data)
@@ -129,6 +128,11 @@ def main():
     elif file_type == "d":
         print("Pickled data: " + str(sendmesg))
         s.send(sendmesg)
+
+    if file_encrypted == "y":
+        backup = file_name + "backup"
+        shutil.copy(backup, file_name)
+        os.remove(backup)
 
     s.close()
 

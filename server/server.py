@@ -50,12 +50,14 @@ def xml_format_dict(file_name): # function for XML <class 'dict'>
         xml_dict = dict(xml_datadict.pop('data'))
         return (xml_dict)
 
-def decrypt_file(filename):
+def decrypt_file(filename, output_type):
     key = open("key.key", "rb").read()
     f = Fernet(key)
     with open(filename, "rb") as file:
         encrypted_data = file.read()
     decrypted_data = f.decrypt(encrypted_data)
+    if output_type == "c":
+        print("\nDecrypted data: \n" + decrypted_data.decode("utf-8"))
     with open(filename, "wb") as file:
         file.write(decrypted_data)
 
@@ -160,9 +162,17 @@ def main():
                 print("Contents of data:  \n ",xml_file) # print data
                 if os.path.exists(file_name):
                     os.remove(file_name)
+
+            elif file_type == "t":
+                print("Contents of text file:")
+                output_console(file_name)
+                
+
         #Decrypt file if required
         if file_encrypted == "y":
-            decrypt_file(file_name)
+            decrypt_file(file_name, output_type)
+        if file_type == "t" and output_type == "c":
+            os.remove(file_name)
 
         clientsocket.close()
         print("\nClosing server")
