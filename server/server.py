@@ -35,7 +35,8 @@ def xml_format(file_name): # function for XML
         root = unpickled.getroot()
         write_file = et.tostring(root)
         xml_decode = write_file.decode() 
-        xml_dict = xmltodict.parse(xml_decode) #change XML to dictionary
+        xml_datadict = xmltodict.parse(xml_decode) #change XML to dictionary
+        xml_dict = dict(xml_datadict.pop('data'))
     with open(file_name, 'w',) as unpkfile: # added to code
         unpkfile.write(str(xml_dict)) # added to code
 
@@ -45,7 +46,8 @@ def xml_format_dict(file_name): # function for XML <class 'dict'>
         root = unpickled.getroot()
         write_file = et.tostring(root)
         xml_decode = write_file.decode() # 
-        xml_dict = xmltodict.parse(xml_decode) #change XML to dictionary
+        xml_datadict = xmltodict.parse(xml_decode) #change XML to dictionary
+        xml_dict = dict(xml_datadict.pop('data'))
         return (xml_dict)
 
 def decrypt_file(filename):
