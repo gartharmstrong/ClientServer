@@ -171,8 +171,8 @@ def main():
         #Decrypt file if required
         if file_encrypted == "y":
             decrypt_file(file_name, output_type)
-            if output_type == "c":
-                os.remove(file_name)
+        if file_type == "t" and output_type == "c":
+            os.remove(file_name)
 
         clientsocket.close()
         print("\nClosing server")
