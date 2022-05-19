@@ -34,12 +34,6 @@ def encrypt_file(filename):
         file.write(encrypted_data)
 
 def main():
-    #Local or remote
-    while True:
-        host = input("Enter server hostname or IP: ")
-        if host != "":
-            break
-
     #File type
     while True:
         file_type = input("File type: Text file(t) or Dictionary(d)? ")
@@ -100,6 +94,8 @@ def main():
     # create a socket object
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
 
+    # get local machine name
+    host = socket.gethostname()
     port = 29999
 
     # connection to hostname on the port.
