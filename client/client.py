@@ -4,6 +4,8 @@ import json
 import pickle as pk
 import time
 import shutil
+import os
+import sys
 
 # Dictionary 
 data = {
@@ -74,16 +76,19 @@ def main():
     #File encryption - only for text file
     if file_type == "t":
         file_name = "textfile.txt"
-        while True:
-            file_encrypted = input("Encrypt file (y/n)? ")
-            if file_encrypted.lower() == "y":
-                print("File will be encrypted")
-                break
-            elif file_encrypted.lower() == "n":
-                print("File will not be encrypted")
-                break
-            else:
-                print("invalid selection")
+        if os.path.exists(file_name):
+            while True:
+                file_encrypted = input("Encrypt file (y/n)? ")
+                if file_encrypted.lower() == "y":
+                    print("File will be encrypted")
+                    break
+                elif file_encrypted.lower() == "n":
+                    print("File will not be encrypted")
+                    break
+                else:
+                    print("invalid selection")
+        else:
+            sys.exit(file_name + " does not exist.")
     else:
         file_encrypted="n" #default value if dictionary
     
