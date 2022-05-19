@@ -52,10 +52,10 @@ def main():
     if file_type == "d":
         while True:
             msg_pickling = print(f"Choose pickling format")
-            msg_pickling = input("1, A\n"
-                    "2, B\n"
-                    "3, C\n"
-                    "Choose 1 for JSON, 2 for Binary format, 3 for XML :")
+            msg_pickling = input("1, JSON\n"
+                    "2, Binary\n"
+                    "3, XML\n"
+                    "Choose 1 for JSON, 2 for Binary format, 3 for XML : ")
             if (str(msg_pickling) == "1"):
                 sendmesg = str.encode(json_pick) # pick for JSON format
                 break
