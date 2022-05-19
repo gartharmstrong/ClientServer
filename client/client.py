@@ -6,6 +6,7 @@ import time
 import shutil
 import os
 import sys
+from xml.etree.ElementTree import Element, tostring
 
 # Dictionary 
 data = {
@@ -16,7 +17,11 @@ data = {
 
 json_pick = json.dumps(data) # for pickling JSON format 
 binary_pick = pk.dumps(data) # for picking binary format
-xml_pick = 1
+xml_pick = Element('data') # to change the data dictionary to an xml file
+for key, value in data.items(): # changing the data into keys and values
+    child_node = Element(key)
+    child_node.text = value
+    xml_pick.append(child_node)
 
 def generate_key():
     key = Fernet.generate_key()
@@ -66,7 +71,7 @@ def main():
                 break
             elif (str(msg_pickling) == "3"):
                 file_name = "xmlfile.txt"
-                sendmesg = xml_pick # pick for XML format
+                sendmesg = tostring(xml_pick) # pick for XML format
                 break
             else:
                 print("invalid selection")
