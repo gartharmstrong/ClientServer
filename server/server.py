@@ -60,7 +60,7 @@ def main():
                 socket.AF_INET, socket.SOCK_STREAM)
 
     # get local machine name
-    host = '0.0.0.0' #accept all ip's                          
+    host = socket.gethostname()                           
     port = 29999                                           
 
     # bind to the port
