@@ -67,7 +67,7 @@ In other cases, the client program will be failed to find the text file when the
 Exceptions are introduced in case user input wrong input where required.
 
 
-### Contributing
+### Contribution
 ***
 This project for the public is available on https://github.com/gartharmstrong/ClientServer - Github [Github-ClientServer](https://github.com/gartharmstrong/ClientServer)
 Group B: Garth Armstrong, Ghafer Ahmed Khan, Hasan Jadallah, Ho Him Lam
