@@ -18,7 +18,7 @@ one of the picking formats available.
 - [Install](#install)
 - [Requirements](#requirements)
 - [Usage](#usage)
-- [Unit test](#unittest)
+- [Unit test](#unit-test)
 - [Contribution](#contribution)
 - [License](#license)
 
