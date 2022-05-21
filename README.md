@@ -32,9 +32,9 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the pac
 3. To JSON encoder/decoder and serialise/deserialise [JSON](https://docs.python.org/3/library/json.html#). json is a built-in module in python and does not need to install with pip.
 4. To serialise/deserialise dictionary in binary using pickle module [Pickle](https://docs.python.org/3/library/pickle.html). The module can be installed by ``` pip install pickle-mixin ```
 5. To handle the file operations install [shutil](https://docs.python.org/3/library/shutil.html) with ``` pip install shutil ```
-6. To change dictionary to XML, parsing, string representation of XML install [elementpath] (https://pypi.org/project/elementpath/) with ``` pip install elementpath ```
+6. To change dictionary to XML, parsing, string representation of XML install [elementpath](https://pypi.org/project/elementpath/) with ``` pip install elementpath ```
 7. The modules ``` os, time, sys ``` are standard modules in python. 
-8. On server side to convert XML to dictionary install [xmltodict] (https://pypi.org/project/xmltodict/) with ``` pip install xmltodict ```
+8. On server side to convert XML to dictionary install [xmltodict](https://pypi.org/project/xmltodict/) with ``` pip install xmltodict ```
 
 ### Usage
 ***
