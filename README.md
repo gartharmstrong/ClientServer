@@ -18,6 +18,7 @@ one of the picking formats available.
 - [Install](#install)
 - [Requirements](#requirements)
 - [Usage](#usage)
+- [Unit test](#unit-test)
 - [Contribution](#contribution)
 - [License](#license)
 
@@ -61,6 +62,21 @@ In other cases, the client program will be failed to find the text file when the
 
 **Output**
 1. After successfully receiving the data. The message will appear "Received data" which shows the class of the object and received data. The session will be closed after successful receival. 
+
+### Unit test
+***
+There are 5 tests included in the unit test:
+1. Testing for sending general text file
+2. Testing for sending encrypted text file
+3. Testing for sending dictionary in json format
+4. Testing for sending dictionary in binary format 
+5. Testing for sending dictionary in xml format
+
+In order to run the unit test,
+1. Access to the testing folder.
+2. Run unit test in test_socket.py with ```python -m unittest test_socket.py ```.
+> **_NOTE:_** 
+If the data sent from the client-side and data received by the server-side are not matched, an error message would be shown at the unit test in the terminal.
 
 ### Limitations / Exceptions
 ***
